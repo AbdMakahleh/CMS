@@ -11,9 +11,15 @@ namespace CMS.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        public object x = 10;
 
 
+        [HttpGet] 
+        public int GetX()
+        {
+            int y = (int)x;
 
-
+            return Convert.ToInt32(y);
+        }
     }
 }
