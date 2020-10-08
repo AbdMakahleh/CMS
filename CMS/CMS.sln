@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS", "CMS.csproj", "{DDA1B72F-3175-49CD-B18A-CC4A14EDFB85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{BE001BD0-10F4-4EB3-B180-0D47D89B6A1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "..\Infrastructure\Infrastructure.csproj", "{2E431FEA-6B81-4863-A8DE-CE5C90E75B32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{DDA1B72F-3175-49CD-B18A-CC4A14EDFB85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDA1B72F-3175-49CD-B18A-CC4A14EDFB85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDA1B72F-3175-49CD-B18A-CC4A14EDFB85}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE001BD0-10F4-4EB3-B180-0D47D89B6A1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE001BD0-10F4-4EB3-B180-0D47D89B6A1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE001BD0-10F4-4EB3-B180-0D47D89B6A1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE001BD0-10F4-4EB3-B180-0D47D89B6A1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E431FEA-6B81-4863-A8DE-CE5C90E75B32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E431FEA-6B81-4863-A8DE-CE5C90E75B32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E431FEA-6B81-4863-A8DE-CE5C90E75B32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E431FEA-6B81-4863-A8DE-CE5C90E75B32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
