@@ -1,0 +1,1 @@
+dotnet ef dbcontext scaffold "Host=144.91.115.253;Database=CMS;Username=postgres;Password=123456" Npgsql.EntityFrameworkCore.PostgreSQL -o Models
