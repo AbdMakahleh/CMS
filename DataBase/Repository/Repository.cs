@@ -73,11 +73,9 @@ namespace DataBase.Repository
         }
         public virtual IResponseResult GetById(object id)
         {
-
-            // log select statement 
             return new ResponseResult<T>()
             {
-                Message = "",
+                Message = "Success",
                 Status = true,
                 Data = Entities.Find(id),
                 Code = HttpStatusCode.OK
