@@ -75,8 +75,12 @@ namespace DataBase.Repository
         {
 
             // log select statement 
-            return new ResponseResult<T>
+            return new ResponseResult<T>()
             {
+                Message = "",
+                Status = true,
+                Data = Entities.Find(id),
+                Code = HttpStatusCode.OK
             };
         }
         public virtual IResponseResult Insert(T t) 
