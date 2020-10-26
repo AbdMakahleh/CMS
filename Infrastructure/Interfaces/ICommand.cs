@@ -9,13 +9,13 @@ namespace Infrastructure.Interfaces
     /// <createdby>
     /// Jebril mohammad
     /// </createdby>
-    internal interface ICommand<T, Entity> where Entity : class, IEntity, new()
+    internal interface ICommand<T>
     {
-        public  T Execute(ICommandParam<Entity> param );
+        public  T Execute(ICommandParam param );
     }
 
-    internal interface ICommandExt<T, Entity> where Entity : class, IEntity, new()
+    internal interface ICommandExt<T>
     {
-        public T Execute(ICommandParam<Entity> param, dynamic paramExt);
+        public T Execute(ICommandParam param, dynamic paramExt);
     }
 }

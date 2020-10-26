@@ -1,5 +1,5 @@
 
-using Business.CommandParam;
+using Business.CommandParams;
 using DataBase.Context;
 using DataBase.Interfaces;
 using DataBase.Locater;
@@ -44,8 +44,8 @@ UseNpgsql(connectionString, b => b.MigrationsAssembly("CMS"))
             services.AddScoped<IUnitOfWork<CMSContext>, UnitOfWork<CMSContext>>();
             services.AddScoped<IProxyLocater, ProxyLocater>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(IDBMangerLocator<>), typeof(DBMangerLocator<>));
-            services.AddScoped(typeof(ICommandParam<>), typeof(CommandParam<>));
+            services.AddScoped<IDBMangerLocator, DBMangerLocator>();
+            services.AddScoped<ICommandParam, CommandParam>();
             //services.addD
         }
 

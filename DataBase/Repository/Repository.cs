@@ -1,5 +1,6 @@
 ﻿using DataBase.Context;
 using DataBase.Entities;
+using DataBase.Models;
 using Infrastructure.ApiResponse;
 using Infrastructure.Encryption;
 using Infrastructure.Entity;
@@ -23,10 +24,10 @@ namespace DataBase.Repository
         private DbSet<T> _entities;
         private string _errorMessage = string.Empty;
         private bool _isDisposed;
-        private readonly ILogger<T> _logger;
+        private readonly ILogger<Log> _logger;
         private readonly IConfiguration _config;
         private readonly IUnitOfWork<CMSContext> _unitOfWork;
-        public Repository(IUnitOfWork<CMSContext> unitOfWork, ILogger<T> logger,IConfiguration configuration): this(unitOfWork.Context)
+        public Repository(IUnitOfWork<CMSContext> unitOfWork, ILogger<Log> logger,IConfiguration configuration): this(unitOfWork.Context)
         {
             _logger = logger;
             _isDisposed = false;
@@ -81,24 +82,21 @@ namespace DataBase.Repository
                 Code = HttpStatusCode.OK
             };
         }
-        public virtual IResponseResult Insert(T t) 
+        public virtual IResponseResult Insert(T entity) 
         {
-
             // log insert 
             _unitOfWork.CreateTransaction();
-            Entity entity = (Entity)(object)t;
             entity.CreatedAt = DateTime.Now;
             entity.CreatedBy = "System";
             // in case there are logged in user set created user ID;
             // else set System
             if (entity == null)
                 throw new ArgumentNullException("entity");
-            Entities.Add((T)(object)entity);
+            Entities.Add(entity);
             if (Context == null || _isDisposed)
                 Context = new CMSContext();
-            if (_unitOfWork.Save())
-            {
-                _unitOfWork.Commit();
+    
+                if(_unitOfWork.Commit())
                 return new ResponseResult<T>
                 {
                     Data = (T)(object)entity,
@@ -107,69 +105,145 @@ namespace DataBase.Repository
                     Code = HttpStatusCode.OK,
                     Status = true
                 };
-           
-            } else
-            {
                 return new ResponseResult
                 {
 
                     Message = string.Empty,
                     ErrorMessage = "Insertion Failed",
                     Code = HttpStatusCode.OK,
-                    Status= false
+                    Status = false
                 };
-            }
-           
-         
-           
-
         }
   
 public T Format<T>(object obj) => JsonConvert.DeserializeObject<T>(obj.ToString());
-    public void BulkInsert(IEnumerable<T> entities)
+    public IResponseResult BulkInsert(IEnumerable<T> entities)
         {
             // log bulk insert
+            _unitOfWork.CreateTransaction();
             if (entities == null)
             {
                 throw new ArgumentNullException("entities");
             }
             Context.ChangeTracker.AutoDetectChangesEnabled = false;
             Context.Set<T>().AddRange(entities);
-
+            if (_unitOfWork.Commit())
+                return new ResponseResult<List<T>>
+                {
+                    Data = entities.ToList(),
+                    Status = true,
+                    Code = HttpStatusCode.OK,
+                    ErrorMessage = string.Empty,
+                    Message = "Inserted Successfully"
+                };
+            return new ResponseResult
+            {
+   
+                Status = true,
+                Code = HttpStatusCode.OK,
+                ErrorMessage = string.Empty,
+                Message = "Insertion Failed"
+            };
 
         }
-        public virtual void Update(T entity)
+        public virtual IResponseResult Update(T entity)
         {
             // log update
-
+            _unitOfWork.CreateTransaction();
+  
+            entity.UpdatedAt = DateTime.Now;
+            entity.UpdatedBy = "System";
             if (entity == null)
                 throw new ArgumentNullException("entity");
             if (Context == null || _isDisposed)
                 Context = new CMSContext();
             SetEntryModified(entity);
-            //Context.SaveChanges(); commented out call to SaveChanges as Context save changes will be called with Unit of work
-
-        }
-        public virtual void Delete(T entity)
-        {
-            // log update
-            try
+            if (_unitOfWork.Commit())
             {
+                return new ResponseResult<T>
+                {
+                    Data = entity,
+                    Status = true,
+                    Code = HttpStatusCode.OK,
+                    ErrorMessage = string.Empty,
+                    Message = "Successfully Updated"
+                };
+            } else
+            {
+                return new ResponseResult
+                {
+                    Status = true,
+                    Code = HttpStatusCode.OK,
+                    ErrorMessage = "Field to  Update",
+                    Message = string.Empty
+                };
+            }
+        }
+        public IResponseResult UpdateEntities(List<T> entities)
+        {
+            int count = entities.Count();
+            for (int i = 0; i < count; i++)
+            {
+                var enitity = (Entity)(object)entities[i];
+                enitity.UpdatedBy = enitity.UpdatedBy;//((UserIdentity)Thread.CurrentPrincipal?.Identity)?.ID.ToString() ?? "System";
+                enitity.UpdatedAt = DateTime.Now;
+                Context.Attach(enitity);
+                Context.Entry(enitity).State = EntityState.Modified;
+                if (_unitOfWork.Commit())
+                    continue;
+                else
+                    return new ResponseResult<List<T>>
+                    {
+                        Code = HttpStatusCode.OK,
+                        Data = entities,
+                        Status = true,
+                        ErrorMessage = "Updating failed",
+                        Message = string.Empty
+                    };
+
+            }
+            return new ResponseResult<List<T>>
+            {
+                Code = HttpStatusCode.OK,
+                Data = entities,
+                Status = true,
+                ErrorMessage = string.Empty,
+                Message = "Success"
+            };
+         
+        }
+
+        public virtual IResponseResult Delete(T entity)
+        {
+                _unitOfWork.CreateTransaction();
+                entity.IsDeleted = true;
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedBy = "System";
                 if (entity == null)
                     throw new ArgumentNullException("entity");
                 if (Context == null || _isDisposed)
                     Context = new CMSContext();
                 SetEntryModified(entity);
-            }
-            catch (Exception ex)
+            if (_unitOfWork.Commit())
             {
-                var x = 1;
+                return new ResponseResult
+                {
+                    Code = HttpStatusCode.OK,
+                    Status = true,
+                    ErrorMessage = string.Empty,
+                    Message = "Deleted Successfully"
+                };
+            } else
+            {
+                return new ResponseResult
+                {
+                    Code = HttpStatusCode.OK,
+                    Status = false,
+                    ErrorMessage = string.Empty,
+                    Message = "Deleted failed"
+                };
             }
-
-            //Context.SaveChanges(); commented out call to SaveChanges as Context save changes will be called with Unit of work
-
-        }
-
+         }
+        
         public virtual IQueryable<T> Find(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationProperties)
         {
             IQueryable<T> dbQuery = Context.Set<T>();
@@ -197,6 +271,8 @@ public T Format<T>(object obj) => JsonConvert.DeserializeObject<T>(obj.ToString(
         {
             return Context.SaveChanges() > -1;
         }
+
+      
     }
 
 }

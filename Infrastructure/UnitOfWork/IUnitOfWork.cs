@@ -10,7 +10,7 @@ namespace Infrastructure.UnitOfWork
     {
         TContext Context { get; }
         void CreateTransaction();
-        void Commit();
+        bool Commit();
         void Rollback();
         bool Save();
     }

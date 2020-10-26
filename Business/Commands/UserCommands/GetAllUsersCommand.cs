@@ -1,4 +1,5 @@
-﻿using Business.CommandParam;
+﻿using Business.CommandParams;
+using DataBase.Locater;
 using DataBase.Models;
 using Infrastructure.ApiResponse;
 using Infrastructure.Classes;
@@ -13,12 +14,12 @@ using System.Text;
 
 namespace Business.Commands.UserCommands
 {
-    public class GetAllUsersCommand : Command<User>
+    public class GetAllUsersCommand : Command
     {
-        public override IResponseResult Execute(ICommandParam<User> param)
+        public override IResponseResult Execute(ICommandParam param)
         {
-            var data = (CommandParam<User>)param;
-            var result =(ResponseResult<IEnumerable<User>>) data.DBManger.Value.RespositoryUnitOfWork.Value._repo.Value.GetAll();
+            var data = (CommandParam)param;
+            var result =(ResponseResult<IEnumerable<User>>) ((DBMangerLocator)data.DBManger.Value).User.Value.Repository.Value.GetAll();
             if (result.Data.ToList().Count > 0)
                 return new ResponseResult<List<JObject>>
                 {

@@ -47,9 +47,22 @@ where TContext : DbContext, new()
         }
         //If all the Transactions are completed successfuly then we need to call this Commit() 
         //method to Save the changes permanently in the database
-        public void Commit()
+        public bool Commit()
         {
-            _objTran.Commit();
+            try
+            {
+                if (Save())
+                { 
+                    _objTran.Commit();
+                    return true;
+                }
+                return false;
+            }catch(Exception ex)
+            {
+                Rollback();
+                return false;
+            }
+       
         }
         //If atleast one of the Transaction is Failed then we need to call this Rollback() 
         //method to Rollback the database changes to its previous state

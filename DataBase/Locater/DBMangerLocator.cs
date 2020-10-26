@@ -1,5 +1,7 @@
 ﻿using DataBase.Context;
+using DataBase.DBManagers;
 using DataBase.Interfaces;
+using DataBase.Models;
 using DataBase.Repository;
 using Infrastructure.Entity;
 using Infrastructure.UnitOfWork;
@@ -11,15 +13,15 @@ using System.Text;
 
 namespace DataBase.Locater
 {
-    public class DBMangerLocator<T> : IDBMangerLocator<T> where T : class, IEntity, new()
+    public class DBMangerLocator : IDBMangerLocator
     {
 
 
-        public Lazy<RespositoryUnitOfWork<T>> RespositoryUnitOfWork { get; set; }
-        public DBMangerLocator(IUnitOfWork<CMSContext> unitOfWork, ILogger<T> logger, IConfiguration configuration)
+        public Lazy<UserDBManager> User { get; set; }
+        public DBMangerLocator(IUnitOfWork<CMSContext> unitOfWork, ILogger<Log> logger, IConfiguration configuration)
         {
-           
-            RespositoryUnitOfWork = new Lazy<RespositoryUnitOfWork<T>>(() => new RespositoryUnitOfWork<T>(unitOfWork, logger, configuration));
+
+            User = new Lazy<UserDBManager>(() => new UserDBManager(unitOfWork, logger, configuration));
         }
 
 

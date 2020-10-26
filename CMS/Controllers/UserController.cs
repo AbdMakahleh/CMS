@@ -15,8 +15,8 @@ namespace CMS.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ICommandParam<User> _userparam;
-        public UserController(ICommandParam<User> userparam)
+        private readonly ICommandParam _userparam;
+        public UserController(ICommandParam userparam)
         {
             _userparam = userparam;
         }

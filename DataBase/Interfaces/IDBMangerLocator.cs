@@ -6,8 +6,8 @@ using System.Text;
 
 namespace DataBase.Interfaces
 {
-   public interface IDBMangerLocator<Entity> where Entity : class, IEntity, new()
+   public interface IDBMangerLocator
     {
-        public Lazy<RespositoryUnitOfWork<Entity>> RespositoryUnitOfWork { get; set; }
+
     }
 }
