@@ -25,7 +25,7 @@ namespace DataBase.DBManagers
 
         public IResponseResult GetLookUpsByMajorCode(string majorCode)
         {
-            IStoredProcedure getLookUpByMajorCode = new GetLookUpByMajorCode(majorCode);
+            IStoredProcedure getLookUpByMajorCode = new GetLookUpByMajorCodeSP(majorCode);
             return new ResponseResult<List<JObject>>
             {
                 Data = QueryExecuter.Instance.ExecuteStoredProcedure(getLookUpByMajorCode),
@@ -35,6 +35,18 @@ namespace DataBase.DBManagers
                 Status = true
             };
         }
-    
+        public IResponseResult GetLookUpByMinorCodesByMajor(string majorCode)
+        {
+            IStoredProcedure getLookUpByMajorCode = new GetLookUpByMinorCodesByMajorSP(majorCode);
+            return new ResponseResult<List<JObject>>
+            {
+                Data = QueryExecuter.Instance.ExecuteStoredProcedure(getLookUpByMajorCode),
+                Code = HttpStatusCode.OK,
+                Message = "Data",
+                ErrorMessage = string.Empty,
+                Status = true
+            };
+        }
+
     }
 }

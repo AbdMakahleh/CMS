@@ -29,9 +29,9 @@ namespace Business.Commands.UserCommands
             {
                 Name = Name,
                 UserName = UserName,
-                Password = Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(Password, 10),
                 Email = Email,
-                PhoneNumber = PhoneNumber,
+                PhoneNumber =PhoneNumber,
                 ProfilePicture = ProfilePicture
             });
             if(result.Status)

@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Business.Commands.UserCommands;
 using DataBase.Models;
 using Infrastructure.ApiResponse;
+using Infrastructure.Attributes;
 using Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +15,7 @@ namespace CMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [SetLoggedUserFilter]
     public class UserController : ControllerBase
     {
         private readonly ICommandParam _userparam;

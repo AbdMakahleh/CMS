@@ -6,14 +6,14 @@ using System.Text;
 
 namespace DataBase.StoredProcedure
 {
-    public class GetLookUpByMinorCodesByMajorSP : IStoredProcedure
+    public class GetLookUpByMajorCodeSP : IStoredProcedure
     {
         public DynamicParameters Parameters { get; set; }
         public string Query { get; set; }
         public DataBaseVisualization[] ResultColumns { get; set; }
-        public GetLookUpByMinorCodesByMajorSP(string majorCode)
+        public GetLookUpByMajorCodeSP(string majorCode)
         {
-            Query = @"select * from ""Setup"".""GetLookUpByMinorCodesByMajor""(@majorCode);";
+            Query = @"select * from ""Setup"".""GetLookUpByMajorCode""(@majorCode);";
             Parameters = new DynamicParameters();
             Parameters.Add("majorCode", majorCode);
             ResultColumns = new DataBaseVisualization[4];

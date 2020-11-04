@@ -23,7 +23,9 @@ namespace CMS.Controllers
         [HttpPost()]
         public IResponseResult AddLookUp([FromBody] AddLookUpCommand command) => command.Execute(param: this._commandParam);
 
-        [HttpGet()]
+        [HttpGet("GetMajorCode")]
         public IResponseResult GetLookByMajorCode([FromQuery] GetLookupByMajorCodeCommand command) => command.Execute(param: this._commandParam);
+        [HttpGet("GetMajorMinor")]
+        public IResponseResult GetMajorMinor([FromQuery] GetLookUpByMinorCodesByMajorCommand command) => command.Execute(param: this._commandParam);
     }
 }
