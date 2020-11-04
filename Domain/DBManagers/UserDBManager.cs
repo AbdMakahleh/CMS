@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataBase.DBManagers
+namespace Domain.DBManagers
 {
   public class UserDBManager
     {

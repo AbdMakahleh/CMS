@@ -1,8 +1,8 @@
-﻿using DataBase.Entities;
+﻿using Domain.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace DataBase.Models
+namespace Domain.Models
 {
     public partial class Cmsmodule : Entity
     {

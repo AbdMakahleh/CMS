@@ -1,14 +1,14 @@
 ﻿using DataBase.Context;
 using DataBase.Interfaces;
 using DataBase.Models;
-using DataBase.DBManagers;
+using Domain.DBManagers;
 using Infrastructure.UnitOfWork;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 
 
-namespace DataBase.Locater
+namespace Domain.Locater
 {
     public class DBMangerLocator : IDBMangerLocator
     {
