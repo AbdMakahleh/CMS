@@ -1,4 +1,6 @@
-﻿using Business.CommandParam;
+﻿
+using Business.CommandParams;
+using DataBase.Locater;
 using DataBase.Models;
 using Infrastructure.ApiResponse;
 using Infrastructure.CommandLayer;
@@ -9,12 +11,13 @@ using System.Text;
 
 namespace Business.Commands.RoleCommands
 {
-    public class GetRoleByIDCommand : Command<Role>
+    public class GetRoleByIDCommand : Command
     {
         public long ID { get; set; }
-        public override IResponseResult Execute(ICommandParam<Role> param)
+        public override IResponseResult Execute(ICommandParam param)
         {
-            var result = (ResponseResult<Role>)((CommandParam<Role>)param).DBManger.Value.RespositoryUnitOfWork.Value._repo.Value.GetById(ID);
+            var data = (CommandParam)param;
+            var result = (ResponseResult<Role>)((DBMangerLocator)data.DBManger.Value).Role.Value.Repository.Value.GetById(ID);
             if (result.Data!=null)
             {
                 return new ResponseResult<object>

@@ -18,6 +18,7 @@ namespace Infrastructure.Repository
         IQueryable<T> Find(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationProperties);
         IQueryable<T> Find(Expression<Func<T, bool>> predicate);
         bool SaveChanges();
-        void BulkInsert(IEnumerable<T> entities);
+        IResponseResult BulkInsert(IEnumerable<T> entities);
+        IResponseResult UpdateEntities(List<T> entities);
     }
 }

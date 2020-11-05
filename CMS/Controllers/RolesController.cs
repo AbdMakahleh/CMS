@@ -10,8 +10,8 @@ namespace CMS.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private readonly ICommandParam<Role> _roleparam;
-        public RolesController(ICommandParam<Role> roleparam)
+        private readonly ICommandParam _roleparam;
+        public RolesController(ICommandParam roleparam)
         {
             _roleparam = roleparam;
         }

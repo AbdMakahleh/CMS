@@ -1,4 +1,5 @@
-﻿using Business.CommandParam;
+﻿using Business.CommandParams;
+using DataBase.Locater;
 using DataBase.Models;
 using Infrastructure.ApiResponse;
 using Infrastructure.Classes;
@@ -11,7 +12,7 @@ using System.Collections.Generic;
 namespace Business.Commands.UserCommands
 {
 
-    public class AddUserCommand : Command<User>
+    public class AddUserCommand : Command
     {
         public string Name { get; set; }
         public string Password { get; set; }
@@ -20,16 +21,17 @@ namespace Business.Commands.UserCommands
         public string PhoneNumber { get; set; }
         public string ProfilePicture { get; set; }
 
-        public override IResponseResult Execute(ICommandParam<User> param)
+        public override IResponseResult Execute(ICommandParam param)
         {
-            var data = (CommandParam<User>)param;
-            var result =(ResponseResult<User>)data.DBManger.Value.RespositoryUnitOfWork.Value._repo.Value.Insert(new User
+            var data = (CommandParam)param;
+
+            var result =(ResponseResult<User>)((DBMangerLocator)data.DBManger.Value).User.Value.Repository.Value.Insert(new User
             {
                 Name = Name,
-                Password = Password,
                 UserName = UserName,
+                Password = BCrypt.Net.BCrypt.HashPassword(Password, 10),
                 Email = Email,
-                PhoneNumber = PhoneNumber,
+                PhoneNumber =PhoneNumber,
                 ProfilePicture = ProfilePicture
             });
             if(result.Status)

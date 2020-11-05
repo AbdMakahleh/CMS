@@ -8,18 +8,18 @@ using System.Text;
 
 namespace Infrastructure.CommandLayer
 {
-    public abstract class Command<Entity> : ICommand<IResponseResult, Entity> where Entity : class, IEntity, new()
+    public abstract class Command : ICommand<IResponseResult> 
     {
-        public abstract IResponseResult Execute(ICommandParam<Entity> param);
+        public abstract IResponseResult Execute(ICommandParam param);
         public IResponseResult BadRequset(string message, string errorCode)
         {
             throw new BadRequestException(message, errorCode);
         }
     }
 
-    public abstract class CommandExt<Entity> : ICommandExt<IResponseResult, Entity> where Entity : class, IEntity, new()
+    public abstract class CommandExt<Entity> : ICommandExt<IResponseResult>where Entity : class, IEntity, new()
     {
-        public abstract IResponseResult Execute(ICommandParam<Entity> param, dynamic paramExt);
+        public abstract IResponseResult Execute(ICommandParam param, dynamic paramExt);
         public IResponseResult BadRequset(string message, string errorCode)
         {
             throw new BadRequestException(message, errorCode);

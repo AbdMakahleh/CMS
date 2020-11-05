@@ -9,6 +9,7 @@ namespace DataBase.Models
         public Cmsmodule()
         {
             Configuration = new HashSet<Configuration>();
+            Lookup = new HashSet<Lookup>();
         }
 
  
@@ -16,5 +17,6 @@ namespace DataBase.Models
 
         public string Description { get; set; }
         public virtual ICollection<Configuration> Configuration { get; set; }
+        public virtual ICollection<Lookup> Lookup { get; set; }
     }
 }

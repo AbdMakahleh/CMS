@@ -194,15 +194,17 @@ namespace DataBase.Context
                     .IsRequired()
                     .HasColumnType("character varying");
 
-                entity.Property(e => e.UpdatedBy).HasColumnType("character varying");
-
-                entity.Property(e => e.Value)
-                    .IsRequired()
+                entity.Property(e => e.MinorCode)
                     .HasColumnType("character varying");
 
+                entity.Property(e => e.UpdatedBy).HasColumnType("character varying");
+
+                entity.Property(e => e.Value).HasColumnType("character varying");
+
                 entity.HasOne(d => d.Cmsmodule)
-                    .WithMany(p => p.InverseCmsmodule)
+                    .WithMany(p => p.Lookup)
                     .HasForeignKey(d => d.CmsmoduleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_LookupCMSModuleID_CMSModuleID");
             });
 

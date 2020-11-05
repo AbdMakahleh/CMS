@@ -1,4 +1,5 @@
-﻿using Business.CommandParam;
+﻿using Business.CommandParams;
+using DataBase.Locater;
 using DataBase.Models;
 using Infrastructure.ApiResponse;
 using Infrastructure.CommandLayer;
@@ -9,14 +10,14 @@ using System.Text;
 
 namespace Business.Commands.RoleCommands
 {
-    public class AddRoleCommand : Command<Role>
+    public class AddRoleCommand : Command
     {
         public string Name { get; set; }
 
-        public override IResponseResult Execute(ICommandParam<Role> param)
+        public override IResponseResult Execute(ICommandParam param)
         {
-            var data = (CommandParam<Role>)param;
-            var result = (ResponseResult<Role>)data.DBManger.Value.RespositoryUnitOfWork.Value._repo.Value.Insert(new Role
+            var data = (CommandParam)param;
+            var result = (ResponseResult<Role>)((DBMangerLocator)data.DBManger.Value).Role.Value.Repository.Value.Insert(new Role
             {
                 Name = Name,
             });

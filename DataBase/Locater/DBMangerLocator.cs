@@ -1,25 +1,29 @@
 ﻿using DataBase.Context;
 using DataBase.Interfaces;
-using DataBase.Repository;
-using Infrastructure.Entity;
+using DataBase.Models;
+using DataBase.DBManagers;
 using Infrastructure.UnitOfWork;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace DataBase.Locater
 {
-    public class DBMangerLocator<T> : IDBMangerLocator<T> where T : class, IEntity, new()
+    public class DBMangerLocator : IDBMangerLocator
     {
 
 
-        public Lazy<RespositoryUnitOfWork<T>> RespositoryUnitOfWork { get; set; }
-        public DBMangerLocator(IUnitOfWork<CMSContext> unitOfWork, ILogger<T> logger, IConfiguration configuration)
+        public Lazy<UserDBManager> User { get; set; }
+        public Lazy<RoleDBManager> Role { get; set; }
+        public Lazy<CMSModuleDBManager> CMSModule { get; set; }
+        public Lazy<LookupDBManager> Lookup { get; set; }
+        public DBMangerLocator(IUnitOfWork<CMSContext> unitOfWork, ILogger<Log> logger, IConfiguration configuration)
         {
-           
-            RespositoryUnitOfWork = new Lazy<RespositoryUnitOfWork<T>>(() => new RespositoryUnitOfWork<T>(unitOfWork, logger, configuration));
+            User = new Lazy<UserDBManager>(() => new UserDBManager(unitOfWork, logger, configuration));
+            Role = new Lazy<RoleDBManager>(() => new RoleDBManager(unitOfWork, logger, configuration));
+            CMSModule = new Lazy<CMSModuleDBManager>(() => new CMSModuleDBManager(unitOfWork, logger, configuration));
+            Lookup = new Lazy<LookupDBManager>(() => new LookupDBManager(unitOfWork, logger, configuration));
         }
 
 
