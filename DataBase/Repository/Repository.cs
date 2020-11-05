@@ -138,32 +138,77 @@ public T Format<T>(object obj) => JsonConvert.DeserializeObject<T>(obj.ToString(
 
 
         }
-        public virtual void Update(T entity)
+        public virtual IResponseResult Update(T entity)
         {
             // log update
 
             if (entity == null)
-                throw new ArgumentNullException("entity");
+            {
+                //throw new ArgumentNullException("entity");
+                return new ResponseResult
+                {
+
+                    Message = string.Empty,
+                    ErrorMessage = "Update Failed , The Entity Is Missing",
+                    Code = HttpStatusCode.OK,
+                    Status = false
+                };
+            }
             if (Context == null || _isDisposed)
                 Context = new CMSContext();
             SetEntryModified(entity);
+            SaveChanges();
+            return new ResponseResult<T>
+            {
+                Data = (T)(object)entity,
+                ErrorMessage = string.Empty,
+                Message = "Successfully Updated",
+                Code = HttpStatusCode.OK,
+                Status = true
+            };
             //Context.SaveChanges(); commented out call to SaveChanges as Context save changes will be called with Unit of work
 
         }
-        public virtual void Delete(T entity)
+        public virtual IResponseResult Delete(T entity)
         {
             // log update
             try
             {
                 if (entity == null)
-                    throw new ArgumentNullException("entity");
+                //throw new ArgumentNullException("entity");
+                {
+                    return new ResponseResult
+                    {
+
+                        Message = string.Empty,
+                        ErrorMessage = "Delete Failed , The Entity Is Missing",
+                        Code = HttpStatusCode.OK,
+                        Status = false
+                    };
+                }
                 if (Context == null || _isDisposed)
                     Context = new CMSContext();
                 SetEntryModified(entity);
+                return new ResponseResult<T>
+                {
+                    Data = new T {},
+                    ErrorMessage = string.Empty,
+                    Message = "Successfully Deleted",
+                    Code = HttpStatusCode.OK,
+                    Status = true
+                };
             }
             catch (Exception ex)
             {
                 var x = 1;
+                return new ResponseResult
+                {
+
+                    Message = string.Empty,
+                    ErrorMessage = "Delete  Failed ",
+                    Code = HttpStatusCode.OK,
+                    Status = false
+                };
             }
 
             //Context.SaveChanges(); commented out call to SaveChanges as Context save changes will be called with Unit of work

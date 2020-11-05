@@ -13,8 +13,8 @@ namespace Infrastructure.Repository
         IResponseResult GetAll();
         IResponseResult GetById(object id);
         IResponseResult Insert(T obj);
-        void Update(T obj);
-        void Delete(T obj);
+        IResponseResult Update(T obj);
+        IResponseResult Delete(T obj);
         IQueryable<T> Find(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationProperties);
         IQueryable<T> Find(Expression<Func<T, bool>> predicate);
         bool SaveChanges();
