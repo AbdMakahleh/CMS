@@ -1,6 +1,7 @@
 ﻿using DataBase.Context;
 using DataBase.Models;
 using DataBase.Repository;
+using Infrastructure.ApiResponse;
 using Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,10 @@ namespace DataBase.DBManagers
         public User GetUserIncludePolicy(long userId)
         {
          return   Repository.Value.Context.User.Include(item => item.Policy).FirstOrDefault(item => item.Id == userId);
+        }
+        public IResponseResult GetUserById(long userId)
+        {
+            return Repository.Value.GetById(userId);
         }
         public User GetUserByEmail(string email)
         {

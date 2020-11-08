@@ -8,6 +8,7 @@ using Infrastructure.Extensions;
 using Infrastructure.Interfaces;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Business.Commands.UserCommands
 {
@@ -45,7 +46,8 @@ namespace Business.Commands.UserCommands
                     new MapSetting("Email",true,false,"Email")
             }, false),
                 Status = result.Status,
-                Message = result.Message
+                Message = result.Message,
+                Code =HttpStatusCode.OK
             };
             return result;
         }

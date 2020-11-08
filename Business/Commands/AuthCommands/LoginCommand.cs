@@ -1,12 +1,10 @@
 ﻿using Business.CommandParams;
-using DataBase.Interfaces;
 using DataBase.Locater;
 using DataBase.Models;
 using Infrastructure.ApiResponse;
 using Infrastructure.CommandLayer;
 using Infrastructure.Identity;
 using Infrastructure.Interfaces;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -14,6 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 
 namespace Business.Commands.AuthCommands
 {
@@ -54,7 +53,7 @@ namespace Business.Commands.AuthCommands
             {
                 Status = false,
                 ErrorMessage = "",
-                Data = _generateJsonWebToken(userIdentity),
+                Data = _generateJsonWebToken(userIdentity, this._commandParam.Config),
                 Code = HttpStatusCode.OK
 
             };
@@ -62,7 +61,7 @@ namespace Business.Commands.AuthCommands
 
 
 
-        private string _generateJsonWebToken(UserIdentity userIdentity)
+        private string _generateJsonWebToken(UserIdentity userIdentity, IConfiguration _config)
         {
             List<Claim> claims = new List<Claim>()
              {
@@ -74,11 +73,14 @@ namespace Business.Commands.AuthCommands
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(5),
-                SigningCredentials = creds
+                SigningCredentials = creds,
+                Issuer = _config.GetSection("AppSettings:Issuer").Value,
+                Audience = _config.GetSection("AppSettings:Audience").Value
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

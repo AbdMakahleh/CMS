@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
+using System;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading;
@@ -14,7 +15,9 @@ namespace Infrastructure.Attributes
             var claim = context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
             if (claim != null)
             {
-                Thread.CurrentPrincipal = new GenericPrincipal(JsonConvert.DeserializeObject<UserIdentity>(claim.Value), new string[] { });
+                UserIdentity identity = new UserIdentity();
+                identity.Id = Convert.ToInt64(claim.Value);
+                Thread.CurrentPrincipal = new GenericPrincipal(identity, new string[] { });
             }
         }
     }

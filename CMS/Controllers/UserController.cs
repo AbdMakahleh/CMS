@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Business.Commands.AuthCommands;
 using Business.Commands.UserCommands;
 using DataBase.Models;
 using Infrastructure.ApiResponse;
@@ -15,7 +16,7 @@ namespace CMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [SetLoggedUserFilter]
+    
     public class UserController : ControllerBase
     {
         private readonly ICommandParam _userparam;
@@ -32,6 +33,10 @@ namespace CMS.Controllers
 
         [HttpGet("GetUsers")]
         public IResponseResult GetUsers([FromQuery] GetAllUsersCommand command) => command.Execute(param: this._userparam);
+
+        [HttpGet("GetCurrentUser")]
+        [SetLoggedUserFilter]
+        public IResponseResult GetCurrentUser([FromQuery] GetCurrentUser command) => command.Execute(param: this._userparam);
 
     }
 }
