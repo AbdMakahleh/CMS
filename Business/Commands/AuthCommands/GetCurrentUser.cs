@@ -11,12 +11,12 @@ namespace Business.Commands.AuthCommands
     public class GetCurrentUser : AuthCommand
     {
 
-        private long _userId;
+   
         public override IResponseResult Execute(ICommandParam param)
         {
 
 
-            return new ResponseResult<long>
+            return new ResponseResult<long?>
             {
                 Data = base.GetCurrentUserId(),
                 Status = true,

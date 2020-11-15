@@ -6,24 +6,49 @@ using Business.CommandParams;
 using DataBase.Locater;
 using Infrastructure.Identity;
 using System.Threading;
+using System.Net;
 
 namespace Business.AuthUserCommand
 {
     public abstract class AuthCommand : Command
     {
-        private long _userId;
+        private long? _userId;
         public abstract override IResponseResult Execute(ICommandParam param);
 
-        public User GetCurrentUser(ICommandParam param)
+        public IResponseResult GetCurrentUser(ICommandParam param)
         {
             var data = (CommandParam)param;
-            _userId = ((UserIdentity)Thread.CurrentPrincipal?.Identity).Id;
-            var dbManager = ((DBMangerLocator)data.DBManger.Value);
-            return ((ResponseResult<User>)dbManager.User.Value.GetUserById(_userId)).Data;
+            _userId = GetCurrentUserId();
+            if (_userId.HasValue)
+            {
+                var dbManager = ((DBMangerLocator)data.DBManger.Value);
+                return dbManager.User.Value.GetUserById(_userId.Value);
+            }
+            return BadRequset("UnAuthorized", "405");
+
+
         }
-        public long GetCurrentUserId()
+
+        public IResponseResult GetCurrentUserPolicy(ICommandParam param)
         {
-            _userId = ((UserIdentity)Thread.CurrentPrincipal?.Identity).Id;
+            var data = (CommandParam)param;
+            _userId = GetCurrentUserId();
+            if (_userId.HasValue)
+            {
+                var dbManager = ((DBMangerLocator)data.DBManger.Value);
+                return new ResponseResult<User>
+                {
+                    Data = dbManager.User.Value.GetUserIncludePolicy(_userId.Value),
+                    Status = true,
+                    Code = HttpStatusCode.OK,
+                    Message = "Exist"
+                };
+            }
+            return BadRequset("UnAuthorized", "405");
+        }
+        public long? GetCurrentUserId()
+        {
+            _userId = ((UserIdentity)Thread.CurrentPrincipal?.Identity)?.Id;
             return _userId;
         }
 

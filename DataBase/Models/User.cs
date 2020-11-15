@@ -1,4 +1,5 @@
 ﻿using DataBase.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +9,7 @@ namespace DataBase.Models
     {
 
         public string Name { get; set; }
+        [JsonIgnore]
         public string Password { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }

@@ -51,9 +51,12 @@ namespace Business.Commands.AuthCommands
 
             return new ResponseResult<object>()
             {
-                Status = false,
+                Status = true,
                 ErrorMessage = "",
-                Data = _generateJsonWebToken(userIdentity, this._commandParam.Config),
+                Data =new { 
+                Token= _generateJsonWebToken(userIdentity, this._commandParam.Config),
+                User= user  
+                } ,
                 Code = HttpStatusCode.OK
 
             };
